@@ -1,28 +1,92 @@
 console.log('Advanced debugging example running.')
 debugger
 
-// first, define the function.
-function goodPractices() {
-  let game = gameObject();
-  for (let gameKey in game) {
-    // are you ABSOLUTELY SURE what 'gameKey' is?
-    // use the debugger to find out!
-    debugger
-    let teamObj = game[gameKey]
-    for (let teamKey in teamObj) {
-      // are you ABSOLUTELY SURE what 'teamKey' is?
-      // use debugger to find out!
-      debugger
+const game = gameObject();
 
-      // what is 'data' at each loop through out this block?
-      // when will the following line of code work and when will it break?
-      let data = teamObj.player
-      for (let key in data) {
-        debugger
+function getSpecifiedPlayer(name) {
+  for (let gameKey in game) {
+    let teamObj = game[gameKey]
+
+    //teamObj is the team, keys are the aspects of a team.
+    for (let key in teamObj) {
+      if (key === 'players') {
+
+        //for the specified player, return their points.
+        for (let individual in teamObj[key]) {
+          if (individual === name){
+            return teamObj[key][individual];
+          }
+        }
       }
     }
   }
 }
 
-// then, call the function so it runs!
-goodPractices()
+function numPointsScored(name) {
+  const player = getSpecifiedPlayer(name);
+  return player.points;
+}
+
+function shoeSize(name) {
+  const player = getSpecifiedPlayer(name);
+  return player.shoe;
+}
+
+function teamColors(name) {
+  for (let gameKey in game) {
+    let teamObj = game[gameKey]
+    if(teamObj.teamName === name) {
+      return teamObj.colors;
+    }
+  }
+}
+
+function teamNames() {
+  let teamNamesList = [];
+for (let gameKey in game) {
+  teamNamesList.push(game[gameKey].teamName);
+  }
+  return teamNamesList;
+}
+
+function playerNumbers(name) {
+  let playerNumbersList = [];
+  for (let gameKey in game) {
+    if (game[gameKey].teamName === name){
+      let teamObj = game[gameKey]
+      for (let key in teamObj) {
+        if (key === 'players') {
+
+          //for add each players number to an array
+          for (let individual in teamObj[key]) {
+              playerNumbersList.push(teamObj[key][individual].number);
+          }
+        }
+      }
+    }
+  }
+  return playerNumbersList;
+}
+
+function playerStats(name) {
+  const player = getSpecifiedPlayer(name);
+  let playerStat = {};
+
+  for(let stats in player){
+    playerStat[stats] = player[stats];
+  }
+  debugger
+  return Object.entries(player);
+}
+
+
+
+//tests
+let playerCheck = "Alan Anderson";
+let teamCheck = "Brooklyn Nets";
+console.log(`Points Scored: ${numPointsScored(playerCheck)}`);
+console.log(`Shoes Size: ${shoeSize(playerCheck)}`);
+console.log(`Team Colors: ${teamColors(teamCheck)}`);
+console.log(`Team Names: ${teamNames()}`);
+console.log(`Team Player Numbers: ${playerNumbers(teamCheck)}`);
+console.log(`Player Stats: ${playerStats(playerCheck)}`);
