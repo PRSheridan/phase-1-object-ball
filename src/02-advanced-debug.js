@@ -75,8 +75,31 @@ function playerStats(name) {
   for(let stats in player){
     playerStat[stats] = player[stats];
   }
-  debugger
-  return Object.entries(player);
+  return playerStat;
+}
+
+function bigShoeRebounds() { 
+  let counter = 0;
+  let largestSize = {name: 0};
+  for (let gameKey in game) {
+    let teamObj = game[gameKey]
+
+    //teamObj is the team, keys are the aspects of a team.
+    for (let key in teamObj) {
+      if (key === 'players') {
+
+        //for the specified player, 
+        for (let individual in teamObj[key]) {
+          if(teamObj.players[individual]["shoe"] > largestSize.name) {
+            debugger
+            largestSize.name = teamObj.players[individual]["shoe"];
+            //largestSize["name"] = largestSize[individual];
+          }
+        }
+      }
+    }
+  }
+  return largestSize;
 }
 
 
@@ -84,9 +107,13 @@ function playerStats(name) {
 //tests
 let playerCheck = "Alan Anderson";
 let teamCheck = "Brooklyn Nets";
+/*
 console.log(`Points Scored: ${numPointsScored(playerCheck)}`);
 console.log(`Shoes Size: ${shoeSize(playerCheck)}`);
 console.log(`Team Colors: ${teamColors(teamCheck)}`);
 console.log(`Team Names: ${teamNames()}`);
 console.log(`Team Player Numbers: ${playerNumbers(teamCheck)}`);
-console.log(`Player Stats: ${playerStats(playerCheck)}`);
+console.log(playerStats(playerCheck));
+*/
+
+console.log(bigShoeRebounds());
