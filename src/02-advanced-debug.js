@@ -21,17 +21,14 @@ function getSpecifiedPlayer(name) {
     }
   }
 }
-
 function numPointsScored(name) {
   const player = getSpecifiedPlayer(name);
   return player.points;
 }
-
 function shoeSize(name) {
   const player = getSpecifiedPlayer(name);
   return player.shoe;
 }
-
 function teamColors(name) {
   for (let gameKey in game) {
     let teamObj = game[gameKey]
@@ -40,7 +37,6 @@ function teamColors(name) {
     }
   }
 }
-
 function teamNames() {
   let teamNamesList = [];
 for (let gameKey in game) {
@@ -48,7 +44,6 @@ for (let gameKey in game) {
   }
   return teamNamesList;
 }
-
 function playerNumbers(name) {
   let playerNumbersList = [];
   for (let gameKey in game) {
@@ -67,7 +62,6 @@ function playerNumbers(name) {
   }
   return playerNumbersList;
 }
-
 function playerStats(name) {
   const player = getSpecifiedPlayer(name);
   let playerStat = {};
@@ -77,31 +71,132 @@ function playerStats(name) {
   }
   return playerStat;
 }
-
 function bigShoeRebounds() { 
-  let counter = 0;
-  let largestSize = {name: 0};
+
+  //vars needed
+  let shoeSize = 0;
+  let nameOf = '';
+  let largestSize = {}
+
   for (let gameKey in game) {
     let teamObj = game[gameKey]
-
-    //teamObj is the team, keys are the aspects of a team.
     for (let key in teamObj) {
       if (key === 'players') {
 
-        //for the specified player, 
+        //for each player, if their shoe is larger assign shoeSize and nameOf
         for (let individual in teamObj[key]) {
-          if(teamObj.players[individual]["shoe"] > largestSize.name) {
-            debugger
-            largestSize.name = teamObj.players[individual]["shoe"];
-            //largestSize["name"] = largestSize[individual];
+          if(shoeSize < teamObj.players[individual]["shoe"]) {
+            shoeSize = teamObj.players[individual]["shoe"];
+            nameOf = individual;
+          }
+          return teamObj.players[individual]['rebounds'];
+        }
+      }
+    }
+  }
+}
+function mostPointsScored() {
+  let playerPoints = 0;
+  let nameOf = '';
+  let mostPoints = {}
+
+  for (let gameKey in game) {
+    let teamObj = game[gameKey]
+    for (let key in teamObj) {
+      if (key === 'players') {
+        for (let individual in teamObj[key]) {
+          if(playerPoints < numPointsScored(individual)) {
+            playerPoints = numPointsScored(individual);
+            nameOf = individual;
           }
         }
       }
     }
   }
-  return largestSize;
+  mostPoints[nameOf] = playerPoints;
+  return mostPoints;
 }
+function winningTeam() {
+  let teamPoints1 = 0;
+  let teamPoints2 = 0;
+  let teamScores = {};
 
+  for (let gameKey in game) {
+    let teamObj = game[gameKey]
+    for (let key in teamObj) {
+      if (key === 'players') {
+        for (let individual in teamObj[key]) {
+          if(gameKey === 'home'){
+            teamPoints1 += numPointsScored(individual);
+          } else if( gameKey === 'away'){
+            teamPoints2 += numPointsScored(individual);
+          }
+        }
+      }
+    }
+    if(gameKey === 'home'){
+      teamScores[gameKey] = teamPoints1;
+    } else if( gameKey === 'away'){
+      teamScores[gameKey] = teamPoints2;
+      if (teamPoints1 > teamPoints2) {
+        debugger
+        return `${teamPoints1} to ${teamPoints2}, home wins!`
+      }else{
+        return `${teamPoints1} to ${teamPoints2}, away wins!`
+      }
+    }
+  }
+}
+function playerWithLongestName() {
+  let longestName = 0;
+  let nameOf = '';
+  let playerNameLength = {}
+  
+
+  for (let gameKey in game) {
+    let teamObj = game[gameKey]
+    for (let key in teamObj) {
+      if (key === 'players') {
+        for (let individual in teamObj[key]) {
+          if(longestName < individual.replace(' ', '').length) {
+            longestName = individual.replace(' ', '').length;
+            nameOf = individual;
+          }
+        }
+      }
+    }
+  }
+  playerNameLength[nameOf] = longestName;
+  return playerNameLength;
+}
+function doesLongNameStealATon() {
+  let playerSteals = 0;
+  let nameOf = '';
+
+  let longestName = 0;
+  let longNameOf = '';
+
+  for (let gameKey in game) {
+    let teamObj = game[gameKey]
+    for (let key in teamObj) {
+      if (key === 'players') {
+        for (let individual in teamObj[key]) {
+          if(playerSteals < teamObj['players'][individual]['steals']) {
+            playerSteals = teamObj['players'][individual]['steals'];
+            nameOf = individual;
+          }
+          if(longestName < individual.replace(' ', '').length) {
+            longestName = individual.replace(' ', '').length;
+            longNameOf = individual;
+          }
+        }
+      }
+    }
+  }
+  console.log(nameOf, longNameOf);
+  console.log(playerSteals, longestName)
+  return nameOf === longNameOf;
+}
 
 
 //tests
@@ -114,6 +209,9 @@ console.log(`Team Colors: ${teamColors(teamCheck)}`);
 console.log(`Team Names: ${teamNames()}`);
 console.log(`Team Player Numbers: ${playerNumbers(teamCheck)}`);
 console.log(playerStats(playerCheck));
-*/
-
 console.log(bigShoeRebounds());
+console.log(mostPointsScored());
+console.log(winningTeam());
+console.log(playerWithLongestName());
+*/
+console.log(doesLongNameStealATon());
